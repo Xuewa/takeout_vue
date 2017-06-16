@@ -67,6 +67,7 @@
     position: absolute
     top: 174px
     bottom: 46px
+    width: 100%
     .menu-wrapper
       flex: 0 0 80px
       background-color: #f3f5f7
