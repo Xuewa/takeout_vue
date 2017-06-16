@@ -121,36 +121,39 @@
             padding-left: 14px
           .foods-item
             display: flex
-            margin: 18px
+            margin: 18px 18px 0 18px
+            padding-bottom: 18px
             border-1px(rgba(7, 17, 27, 0.1))
             &:last-child
-              /*border-bottom: none*/
-              .food-img
-                width: 60px
-                height: 60px
-                margin-right: 10px
-                /*vertical-align: top*/
-              .content
-                height: 60px
-                font-size: 10px
-                color: rgb(147, 153, 159)
-                .name
+              &:after
+                border-top: none
+            .food-img
+              width: 60px
+              height: 60px
+              margin-right: 10px
+              /*vertical-align: top*/
+            .content
+              height: 60px
+              font-size: 10px
+              color: rgb(147, 153, 159)
+              .name
+                font-size: 14px
+                color: rgb(7, 17, 27)
+              .description
+                margin-top: 8px
+              .extra
+                margin-top: 8px
+              .price
+                margin-top: 8px
+                .nowPrice
+                  color: red
                   font-size: 14px
-                  color: rgb(7, 17, 27)
-                .description
-                  margin-top: 8px
-                .extra
-                  margin-top: 8px
-                .price
-                  margin-top: 8px
-                  .nowPrice
-                    color: red
-                    font-size: 14px
-                    font-weight: 700
-                    .dollar
-                      font-size: 10px
-                  .oldPrice
+                  font-weight: 700
+                  .dollar
                     font-size: 10px
-                    margin-left: 8px
+                .oldPrice
+                  font-size: 10px
+                  margin-left: 8px
+                  text-decoration: line-through;
 
 </style>
