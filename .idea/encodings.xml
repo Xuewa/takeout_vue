@@ -9,6 +9,7 @@
     <file url="file://$PROJECT_DIR$/src/common/stylus/icon.styl" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/common/stylus/index.styl" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/common/stylus/mixin.styl" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/components/cartcontrol/cartcontrol.vue" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/components/goods/goods.vue" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/components/header/header.vue" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/components/ratings/ratings.vue" charset="UTF-8" />
