@@ -1,7 +1,7 @@
 <template>
   <div class="cartcontrol">
     <div class="cart-decrease icon-remove_circle_outline" v-show="food.count>0"></div>
-    <div class="cart-count" v-show="food.count>0">{{food.count}}</div>
+    <div class="cart-count" v-show="food.count>0">1{{food.count}}</div>
     <div class="cart-add icon-add_circle" @click="addCart"></div>
   </div>
 </template>
@@ -32,6 +32,9 @@
       color: rgb(0, 160, 220)
     .cart-count
       display: inline-block
+      width:  30px
+      height: 100%
+      vertical-align: top
     .cart-add
       display: inline-block
 
