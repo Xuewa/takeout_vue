@@ -58,10 +58,10 @@ export default {
       return count;
     },
     payDesc() {
-      if (this.totalPrice === 0) return `￥${this.minPrice}起送`;
+      if (this.totalPrice === 0) return `￥${this.minPrice}元起送`;
       else if (this.totalPrice < this.minPrice) {
         let leftMon = this.minPrice - this.totalPrice;
-        return `还差￥${leftMon}起送`;
+        return `还差￥${leftMon}元起送`;
       } else return '去结算';
     }
   }
