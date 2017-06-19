@@ -18,7 +18,8 @@
     "stylus-loader": "^2.4.0",
     "vue": "^2.1.10",
     "vue-resource": "^1.2.0",
-    "vue-router": "^2.2.0"
+    "vue-router": "^2.2.0",
+    "better-scroll": "^0.1.7" 
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",

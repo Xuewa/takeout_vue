@@ -38,6 +38,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import BScroll from 'better-scroll';
   const ERR_OK = 0;
   export default {
     data() {
@@ -47,6 +48,7 @@
     },
     created() {
       this.classMap = ['decrease', 'discount', 'guarantee', 'invoice', 'special'];
+
       this.$http.get('/api/goods').then((response) => {
         // get body data
         response = response.body;
@@ -55,6 +57,11 @@
 //          console.log(this.goods);
         }
       });
+    },
+    methods: {
+      _initScroll() {
+        this.menuScroll = new BScroll();
+      }
     }
   };
 
