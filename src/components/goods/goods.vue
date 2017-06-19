@@ -1,8 +1,8 @@
 <template>
   <div class="goods">
-    <div class="menu-wrapper">
+    <div class="menu-wrapper" ref="menuWrapper">
       <ul>
-        <li class="menu-item border-1px" v-for="item in goods">
+        <li class="menu-item border-1px" v-for="(item,index) in goods" :class="currentIndex===index?'current':''" @click="selectMenu(index,$event)">
           <span class="text">
             <span class="icon" :class="classMap[item.type]" v-if="item.type>0"></span>
             {{item.name}}
@@ -10,9 +10,9 @@
         </li>
       </ul>
     </div>
-    <div class="goods-wrapper">
+    <div class="foods-wrapper" ref="foodWrapper">
       <ul>
-        <li class="foods-list" v-for="item in goods">
+        <li class="foods-list" ref="foodList" v-for="item in goods">
           <div class="title">
             {{item.name}}
           </div>
@@ -29,22 +29,48 @@
                 <span class="nowPrice"><span class="dollar">￥</span>{{food.price}}</span>
                 <span class="oldPrice" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
               </div>
+              <div class="cartcontrol-wrapper">
+                <cartcontrol :food="food"></cartcontrol>
+              </div>
             </div>
           </div>
         </li>
       </ul>
     </div>
+    <shopcart :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import BScroll from 'better-scroll';
+  import shopcart from 'components/shopcart/shopcart.vue';
+  import cartcontrol from 'components/cartcontrol/cartcontrol.vue';
+
   const ERR_OK = 0;
   export default {
+    props: {
+      seller: {
+        type: Object
+      }
+    },
     data() {
       return {
-        goods: []
+        goods: [],
+        heightList: [],
+        scrollY: 0
       };
+    },
+    computed: {
+      currentIndex() {
+        for (let i = 0; i < this.heightList.length; i++) {
+          let heightMin = this.heightList[i];
+          let heightMax = this.heightList[i + 1];
+          if (!heightMax || (this.scrollY >= heightMin && this.scrollY < heightMax)) {
+            return i;
+          }
+        }
+        return 0;
+      }
     },
     created() {
       this.classMap = ['decrease', 'discount', 'guarantee', 'invoice', 'special'];
@@ -54,14 +80,40 @@
         response = response.body;
         if (response.errno === ERR_OK) {
           this.goods = response.data;
-//          console.log(this.goods);
+          this.$nextTick(() => {
+            this._initScroll();
+            this._calculateHeight();
+           // console.log(this.heightList);
+          });
         }
       });
     },
     methods: {
       _initScroll() {
-        this.menuScroll = new BScroll();
+        this.menuScroll = new BScroll(this.$refs.menuWrapper, {click: true});
+        this.foodScroll = new BScroll(this.$refs.foodWrapper, {probeType: 3});
+        this.foodScroll.on('scroll', (pos) => {
+          this.scrollY = Math.abs(Math.round(pos.y));
+        });
+      },
+      _calculateHeight() {
+        let height = 0;
+        let foodList = this.$refs.foodList;
+        for (let i = 0; i < foodList.length; i++) {
+          this.heightList.push(height);
+          height += foodList[i].clientHeight;
+        }
+      },
+      selectMenu(idx, ev) {
+        if (!ev._constructed) return;
+        let foodList = this.$refs.foodList;
+        this.foodScroll.scrollToElement(foodList[idx], 300);
+        console.log(idx);
       }
+    },
+    components: {
+      'shopcart': shopcart,
+      'cartcontrol': cartcontrol
     }
   };
 
@@ -75,12 +127,13 @@
     top: 174px
     bottom: 46px
     width: 100%
+    overflow: hidden
     .menu-wrapper
       flex: 0 0 80px
       background-color: #f3f5f7
       width: 80px
       font-size: 12px
-      overflow: auto
+      /*overflow: auto*/
       ul
         .menu-item
           height: 52px
@@ -90,6 +143,10 @@
           padding: 0 12px
           display: table
           border-1px(rgba(7, 17, 37, 0.1))
+          &.current
+            background-color: #fff
+            .text
+              font-weight: 700
           .text
             vertical-align: middle
             display: table-cell
@@ -112,9 +169,10 @@
               &.special
                 bg-img('special_3')
 
-    .goods-wrapper
+    .foods-wrapper
       flex: 1
-      overflow: auto;
+      width: calc(100% - 80px)
+      /*overflow: auto;*/
       ul
         .foods-list
           .title
@@ -131,6 +189,7 @@
             margin: 18px 18px 0 18px
             padding-bottom: 18px
             border-1px(rgba(7, 17, 27, 0.1))
+            width: 100%
             &:last-child
               &:after
                 border-top: none
@@ -143,11 +202,16 @@
               height: 60px
               font-size: 10px
               color: rgb(147, 153, 159)
+              width: 100%
               .name
                 font-size: 14px
                 color: rgb(7, 17, 27)
               .description
                 margin-top: 8px
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+                width: calc(100% - 100px)
               .extra
                 margin-top: 8px
               .price
@@ -162,5 +226,9 @@
                   font-size: 10px
                   margin-left: 8px
                   text-decoration: line-through;
+              .cartcontrol-wrapper
+                position: absolute
+                right: 20px
+                bottom: 0
 
 </style>
