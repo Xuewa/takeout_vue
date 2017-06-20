@@ -25,6 +25,7 @@
         } else {
           this.food.count++;
         };
+        this.$emit('add', ev.target);
       },
       decreaseCart(ev) {
         if (!ev._constructed) return;
@@ -46,7 +47,7 @@
       padding: 3px
       transition: all 0.4s linear
       opacity: 1
-      transform: translate3D(0, 0, 0)
+      transform: translate3d(0, 0, 0)
       .inner
         display: inline-block
         line-height: 24px
@@ -56,7 +57,7 @@
         transform: rotate(180deg)
       &.move-enter,&.move-leave-to
         opacity:0
-        transform: translate3D(24px, 0, 0) 
+        transform: translate3d(24px, 0, 0) 
         .inner 
           transform: rotate(0deg)
     .cart-count

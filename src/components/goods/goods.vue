@@ -30,7 +30,7 @@
                 <span class="oldPrice" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
               </div>
               <div class="cartcontrol-wrapper">
-                <cartcontrol :food="food"></cartcontrol>
+                <cartcontrol @add="cartAdd" :food="food"></cartcontrol>
               </div>
             </div>
           </div>
@@ -115,11 +115,18 @@
           height += foodList[i].clientHeight;
         }
       },
+      _drop(el) {
+      
+      },
       selectMenu(idx, ev) {
         if (!ev._constructed) return;
         let foodList = this.$refs.foodList;
         this.foodScroll.scrollToElement(foodList[idx], 300);
         console.log(idx);
+      },
+      cartAdd(target) {
+        // console.log(target);
+        this._drop(target);
       }
     },
     components: {
