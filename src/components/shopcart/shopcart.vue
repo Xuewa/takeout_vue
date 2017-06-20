@@ -18,6 +18,15 @@
 				{{payDesc}}</span>
 			</div>
 		</div>
+		<div class="balls-container">
+			<div v-for="ball in balls">
+				<transition name="drop">
+					<div class="ball" v-show="ball.show">
+						 <span class="inner"></span>
+					</div>
+				</transition>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -42,6 +51,18 @@ export default {
       default: 0
     }
   },
+  data() {
+    return {
+      balls: [
+        {
+          show: true
+        },
+        {
+          show: false
+        }
+      ]
+    };
+  },
   computed: {
     totalPrice() {
       let total = 0;
@@ -63,6 +84,11 @@ export default {
         let leftMon = this.minPrice - this.totalPrice;
         return `还差￥${leftMon}元起送`;
       } else return '去结算';
+    }
+  },
+  methods: {
+    drop(el) {
+      console.log(el);
     }
   }
 };
@@ -157,4 +183,22 @@ export default {
 						background-color: rgb(0, 160, 220)
 						color: #fff
 						font-size: 16px
+		.balls-container
+			position: fixed
+			display: inline-block
+			left: 32px
+			bottom: 22px
+			z-index: 3
+			border-radius: 50%
+			width: 16px
+			height: 16px
+			.ball
+				opacity: 1
+				transition: all 0.4s cubic-bezier(0.15,0.65,0.72,1.28)
+				.inner
+					width: 16px
+					height: 16px
+					display: inline-block
+					border-radius: 50%
+			        background-color: rgb(10, 160, 220)
 </style>
