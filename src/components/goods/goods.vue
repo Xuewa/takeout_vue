@@ -85,7 +85,6 @@
     },
     created() {
       this.classMap = ['decrease', 'discount', 'guarantee', 'invoice', 'special'];
-
       this.$http.get('/api/goods').then((response) => {
         // get body data
         response = response.body;

@@ -20,7 +20,7 @@
 		</div>
 		<div class="balls-container">
 			<div v-for="ball in balls">
-				<transition name="drop">
+				<transition name="drop" v-on:before-enter="beforeDropEnter" v-on:enter="droppingEnter" v-on:after-enter="afterDropEnter">
 					<div class="ball" v-show="ball.show">
 						 <span class="inner"></span>
 					</div>
@@ -55,12 +55,22 @@ export default {
     return {
       balls: [
         {
-          show: true
+          show: false
         },
         {
           show: false
+        },
+        {
+          show: false
+        },
+        {
+          show: false
+        },
+        {
+          show: true
         }
-      ]
+      ],
+      dropBalls: []
     };
   },
   computed: {
@@ -88,8 +98,29 @@ export default {
   },
   methods: {
     drop(el) {
-      console.log(el);
-    }
+      for (let i = 0; i < this.balls.length; i++) {
+        if (!this.balls[i].show) {
+          this.balls[i].show = true;
+          this.balls[i].el = el;
+          this.dropBalls.push(this.balls[i]);
+        }
+      };
+    },
+    beforeDropEnter(el) {
+      for (let i = 0; i < this.dropBalls.length; i++) {
+        if (el === this.dropBalls[i].el) {
+          console.log(el);
+          el.style.opacity = 0;
+          el.style.top = 0;
+        }
+      }
+    },
+    droppingEnter(el) {
+      for (let i = 0; i < this.dropBalls.length; i++) {
+        if (el === this.dropBalls[i].el) {
+          el.style.opacity = 1;
+        }
+    },
   }
 };
 </script>
