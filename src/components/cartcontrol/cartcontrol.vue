@@ -26,6 +26,7 @@
           this.food.count++;
         };
         this.$emit('add', ev.target);
+        console.log('add---');
       },
       decreaseCart(ev) {
         if (!ev._constructed) return;

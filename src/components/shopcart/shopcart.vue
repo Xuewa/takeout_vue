@@ -1,8 +1,8 @@
 <template>
 	<div class="shopcart">
 		<div class="content">
-			<div class="content-left">
-				<div class="logo-wrapper">
+			<div class="content-left" @click=toggleCartList()>
+				<div class="logo-wrapper" >
 					<span class="logo" :class="{'current':totalCount>0}">
 					  <i class="icon-shopping_cart "></i>
 					</span>
@@ -27,10 +27,33 @@
 				</transition>
 			</div>
 		</div>
+		<transition name="toggleUp">
+			<div class="shopcart-list" v-show="listShow">
+				<div class="shopcartList-header">
+					<span class="title">购物车</span>
+					<span class="empty">清空</span>
+				</div>
+				<div class="shopcartList-content">
+					<ul>
+						<li class="food" v-for="food in selectFoods">
+							<span class="shopcartList-left">{{food.name}}</span>
+							<span class="shopcartList-right">
+								<span class="price">￥{{food.price*food.count}}</span>
+								<span class="cartcontrol-wrapper">
+		            				<cartcontrol @add="cartAdd()" :food="food"></cartcontrol>
+		          				</span>
+							</span>
+
+						</li>
+					</ul>
+				</div>
+			</div>
+		</transition>
 	</div>
 </template>
 
 <script type="text/ecmascript-6">
+import cartcontrol from 'components/cartcontrol/cartcontrol.vue';
 export default {
   props: {
     selectFoods: {
@@ -70,7 +93,8 @@ export default {
           show: false
         }
       ],
-      dropBalls: []
+      dropBalls: [],
+      listShow: false
     };
   },
   computed: {
@@ -143,7 +167,18 @@ export default {
         ball.show = false;
         el.style.display = 'none';
       }
+    },
+    toggleCartList() {
+      this.listShow = !this.listShow;
+      if (!this.totalCount) {
+        this.listShow = false;
+      }
+    },
+    cartAdd() {
     }
+  },
+  components: {
+    cartcontrol: cartcontrol
   }
 };
 </script>
@@ -159,6 +194,10 @@ export default {
 			background-color: #141d27
 			display: flex
 			color: rgba(255,255,255,.4)
+			position: absolute
+			left: 0
+			right: 0
+			z-index: 2
 			.content-left
 				flex: 1
 				.logo-wrapper
@@ -251,4 +290,54 @@ export default {
 					border-radius: 50%
 					background: rgb(0, 160, 220)
 					transition: all 0.4s linear
+		.shopcart-list
+			position: absolute
+			z-index: 0
+			bottom: 48px
+			left: 0;
+			right: 0;
+			background-color: #fff;
+			max-height: 305.5px
+			overflow-y: auto
+    		transition: all 0.4s linear
+        	transform: translate3d(0, 0, 0) 
+        	&.toggleUp-enter,toggleUp-leave-to
+				opacity: 0
+				transform: translate3d(0, 305.5px, 0) 
+			.shopcartList-header
+				font-size: 14px
+				font-weight: 200
+				color: rgb(7,17,27)
+				line-height: 40px
+				height: 40
+				background-color: #f3f5f7
+				border-bottom: 1px solid rgba(7,17,27,.1)
+				.title
+					margin-left: 18px
+				.empty
+					float: right
+					color: rgb(0, 160, 220)
+					margin-right: 18px
+			.shopcartList-content
+				li
+					height:24px
+					padding: 12px 18px
+					border-bottom: 1px solid rgba(7,17,27,.1)
+					.shopcartList-left
+						display: inline-block
+						color: rgb(7,17,27)
+						line-height: 24px
+					.shopcartList-right
+						color: rgb(240,20,20)
+						font-weight: 700
+						font-size: 14px
+						line-height: 24px
+						float: right
+						display: inline-block
+						.price
+							line-height: 24px
+							margin-right: 12px
+						.cartcontrol-wrapper
+							float:right
+			
 </style>
