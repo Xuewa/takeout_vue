@@ -20,7 +20,7 @@
 		</div>
 		<div class="balls-container">
 			<div v-for="ball in balls">
-				<transition name="drop" @before-enter="beforeDropEnter" @enter="droppingEnter" @after-enter="afterDropEnter">
+				<transition name="drop" @before-enter="beforeDrop" @enter="dropping" @after-enter="afterDrop">
 					<div class="ball" v-show="ball.show">
 						 <div class="inner inner-hook"></div>
 					</div>
@@ -98,59 +98,50 @@ export default {
   },
   methods: {
     drop(el) {
-      console.log(el);
       for (let i = 0; i < this.balls.length; i++) {
-        if (!this.balls[i].show) {
-          this.balls[i].show = true;
-          this.balls[i].el = el;
-          this.dropBalls.push(this.balls[i]);
-          // console.log(this.dropBalls);
+        let ball = this.balls[i];
+        if (!ball.show) {
+          ball.show = true;
+          ball.el = el;
+          this.dropBalls.push(ball);
           return;
         }
-      };
+      }
     },
-    beforeDropEnter(el) {
-      // el==>ball?
+    beforeDrop(el) {
       let count = this.balls.length;
       while (count--) {
         let ball = this.balls[count];
         if (ball.show) {
           let rect = ball.el.getBoundingClientRect();
-          // let x = rect.left - 32;
+          let x = rect.left - 32;
           let y = -(window.innerHeight - rect.top - 22);
           el.style.display = '';
           el.style.webkitTransform = `translate3d(0,${y}px,0)`;
           el.style.transform = `translate3d(0,${y}px,0)`;
           let inner = el.getElementsByClassName('inner-hook')[0];
-          inner.style.webkitTransform = `translate3d(100px,0,0)`;
-          inner.style.transform = `translate3d(100px,0,0)`;
-          console.log(inner);
+          inner.style.webkitTransform = `translate3d(${x}px,0,0)`;
+          inner.style.transform = `translate3d(${x}px,0,0)`;
         }
       }
     },
-    droppingEnter(el, done) {
+    dropping(el, done) {
       /* eslint-disable no-unused-vars */
       let rf = el.offsetHeight;
       this.$nextTick(() => {
-        el.style.opacity = 1;
         el.style.webkitTransform = 'translate3d(0,0,0)';
         el.style.transform = 'translate3d(0,0,0)';
         let inner = el.getElementsByClassName('inner-hook')[0];
-        console.log(inner);
         inner.style.webkitTransform = 'translate3d(0,0,0)';
         inner.style.transform = 'translate3d(0,0,0)';
         el.addEventListener('transitionend', done);
       });
     },
-    // 动画结束
-    afterDropEnter(el) {
-      let inner = el.getElementsByClassName('inner-hook')[0];
-      // console.log(inner.style.transform);
+    afterDrop(el) {
       let ball = this.dropBalls.shift();
       if (ball) {
         ball.show = false;
         el.style.display = 'none';
-        // console.log(el);
       }
     }
   }
@@ -246,18 +237,18 @@ export default {
 						background-color: rgb(0, 160, 220)
 						color: #fff
 						font-size: 16px
-		.balls-container			
+		.balls-container
 			.ball
-				transition: all 0.4s cubic-bezier(0.49,-0.29,0.72,0.41)
 				position: fixed
 				left: 32px
 				bottom: 22px
-				z-index: 3
+				z-index: 200
+				transition: all 0.4s cubic-bezier(0.49, -0.29, 0.75, 0.41)
 				.inner
 					width: 16px
 					height: 16px
+					display: inline-block
 					border-radius: 50%
-					background-color: rgb(10, 160, 220)
-				    transition: all 0.4s linear
-
+					background: rgb(0, 160, 220)
+					transition: all 0.4s linear
 </style>
