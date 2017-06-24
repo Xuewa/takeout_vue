@@ -31,9 +31,9 @@
 			<div class="shopcart-list" v-show="listShow">
 				<div class="shopcartList-header">
 					<span class="title">购物车</span>
-					<span class="empty">清空</span>
+					<span class="empty" @click="empty()">清空</span>
 				</div>
-				<div class="shopcartList-content">
+				<div class="shopcartList-content" ref="cartList-Wrapper">
 					<ul>
 						<li class="food" v-for="food in selectFoods">
 							<span class="shopcartList-left">{{food.name}}</span>
@@ -54,6 +54,8 @@
 
 <script type="text/ecmascript-6">
 import cartcontrol from 'components/cartcontrol/cartcontrol.vue';
+import BScroll from 'better-scroll';
+
 export default {
   props: {
     selectFoods: {
@@ -172,9 +174,19 @@ export default {
       this.listShow = !this.listShow;
       if (!this.totalCount) {
         this.listShow = false;
-      }
+      };
+      this.$nextTick(() => {
+        this.cartListScroll = new BScroll(this.refs.cartListWrapper, {click: true});
+      });
     },
     cartAdd() {
+    },
+    empty() {
+    // 可以访问改写props的属性
+      this.selectFoods.forEach((food) => {
+        food.count = 0;
+      });
+      // this.selectFoods = [];
     }
   },
   components: {
@@ -299,9 +311,10 @@ export default {
 			background-color: #fff;
 			max-height: 305.5px
 			overflow-y: auto
-    		transition: all 0.4s linear
-        	transform: translate3d(0, 0, 0) 
-        	&.toggleUp-enter,toggleUp-leave-to
+			transition: all 0.6s linear
+			transform: translate3d(0, 0, 0)
+			opacity: 1
+			&.toggleUp-enter,&.toggleUp-leave-to
 				opacity: 0
 				transform: translate3d(0, 305.5px, 0) 
 			.shopcartList-header
