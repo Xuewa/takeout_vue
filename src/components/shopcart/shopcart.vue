@@ -13,7 +13,7 @@
 				</span>
 				<span class="desc">另需配送费￥{{deliveryPrice}}元</span>
 			</div>
-			<div class="content-right">
+			<div class="content-right" @click=pay>
 				<span class="pay" :class="{'highlight':totalPrice>=minPrice}">
 				{{payDesc}}</span>
 			</div>
@@ -33,14 +33,14 @@
 					<span class="title">购物车</span>
 					<span class="empty" @click="empty()">清空</span>
 				</div>
-				<div class="shopcartList-content" ref="cartList-Wrapper">
+				<div class="shopcartList-content" ref="cartListWrapper">
 					<ul>
 						<li class="food" v-for="food in selectFoods">
 							<span class="shopcartList-left">{{food.name}}</span>
 							<span class="shopcartList-right">
 								<span class="price">￥{{food.price*food.count}}</span>
 								<span class="cartcontrol-wrapper">
-		            				<cartcontrol @add="cartAdd()" :food="food"></cartcontrol>
+		            				<cartcontrol  :food="food"></cartcontrol>
 		          				</span>
 							</span>
 
@@ -48,6 +48,9 @@
 					</ul>
 				</div>
 			</div>
+		</transition>
+		<transition name="fade">
+			<div class="mask"  @click=toggleCartList() v-show="listShow"></div>
 		</transition>
 	</div>
 </template>
@@ -96,7 +99,8 @@ export default {
         }
       ],
       dropBalls: [],
-      listShow: false
+      // 折叠属性
+      fold: true
     };
   },
   computed: {
@@ -120,6 +124,9 @@ export default {
         let leftMon = this.minPrice - this.totalPrice;
         return `还差￥${leftMon}元起送`;
       } else return '去结算';
+    },
+    listShow() {
+      return (this.totalCount) && (!this.fold);
     }
   },
   methods: {
@@ -171,22 +178,30 @@ export default {
       }
     },
     toggleCartList() {
-      this.listShow = !this.listShow;
       if (!this.totalCount) {
-        this.listShow = false;
-      };
+        this.fold = true;
+        return;
+      } else {
+        this.fold = !this.fold;
+      }
       this.$nextTick(() => {
-        this.cartListScroll = new BScroll(this.refs.cartListWrapper, {click: true});
+        this.cartListScroll = new BScroll(this.$refs.cartListWrapper, {click: true});
       });
-    },
-    cartAdd() {
     },
     empty() {
     // 可以访问改写props的属性
       this.selectFoods.forEach((food) => {
         food.count = 0;
       });
-      // this.selectFoods = [];
+      this.fold = true;
+    },
+    pay() {
+      if (this.totalPrice < this.minPrice) {
+        return;
+      } else {
+        let payMon = this.totalPrice + this.deliveryPrice;
+        alert(`支付${payMon}大洋！`);
+      }
     }
   },
   components: {
@@ -304,7 +319,7 @@ export default {
 					transition: all 0.4s linear
 		.shopcart-list
 			position: absolute
-			z-index: 0
+			z-index: 1
 			bottom: 48px
 			left: 0;
 			right: 0;
@@ -352,5 +367,19 @@ export default {
 							margin-right: 12px
 						.cartcontrol-wrapper
 							float:right
-			
+		.mask
+			background-color: rgba(7,17,27,.6)
+			filter: blur(10px)
+			backdrop-filter: blur(10px)
+			-webkit-filter: blur(10px)
+			position: fixed
+			top: 0
+			bottom: 0
+			left: 0
+			right: 0
+			z-index: 0
+			opacity: 1
+			transition: all 0.7s linear
+			&.fade-enter,&.fade-leave-to
+				opacity: 0
 </style>
