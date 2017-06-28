@@ -37,7 +37,7 @@
         </li>
       </ul>
     </div>
-    <food :food="selectedFood"></food>
+    <food :food="selectedFood" ref="foodEle" @add="cartAdd"></food>
     <shopcart ref="shopcart" :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
   </div>
 </template>
@@ -119,6 +119,7 @@
       },
       _drop(el) {
         this.$nextTick(() => {
+          // console.log(el);
           this.$refs.shopcart.drop(el);
         });
       },
@@ -126,7 +127,7 @@
         if (!ev._constructed) return;
         let foodList = this.$refs.foodList;
         this.foodScroll.scrollToElement(foodList[idx], 300);
-        console.log(idx);
+        // console.log(idx);
       },
       cartAdd(target) {
         // console.log(target);
@@ -135,6 +136,7 @@
       selectFood(food) {
         console.log(food);
         this.selectedFood = food;
+        this.$refs.foodEle.initShow();
       }
     },
     components: {
