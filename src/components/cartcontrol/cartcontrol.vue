@@ -25,8 +25,9 @@
         } else {
           this.food.count++;
         };
-        this.$emit('add', ev.target);
         console.log('add---');
+        this.$emit('add', ev.target);
+        ev.stopPropagation();
       },
       decreaseCart(ev) {
         if (!ev._constructed) return;
@@ -35,6 +36,7 @@
         } else {
           this.food.count--;
         }
+        ev.stopPropagation();
       }
     }
   };
