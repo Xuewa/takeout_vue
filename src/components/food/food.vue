@@ -1,7 +1,7 @@
 <template>
   <transition name='moveAlign'>
     <div class="food" v-show="showFlag" ref="food">
-      <div>
+      <div class="food-container">
         <div class="foodImg-wrapper" >
           <img class="food-img" :src="food.image" alt="food.name"/>
           <div class="back" @click="backward($event)"><i class="icon-arrow_lift"></i></div>
@@ -37,7 +37,32 @@
         <div class="food-rating">
           <div class="food-title">商品评价</div>
           <!-- tab -->
-          <ratingSelect></ratingSelect>
+          <ratingSelect @ratingTypeSelect="ratingTypeSelect" @contentToggle="contentToggle" :selectType="rateType"
+          :onlyContent="onlyContent" :ratingArr="food.ratings"></ratingSelect>
+          <div class="ratingList-wrapper">
+            <ul v-show="food.ratings && food.ratings.length">
+              <li  v-for="rating in food.ratings" v-show="needShow(rateType,rating)">
+                <div class="row1">
+                  <span class="time">
+                    {{rating.rateTime}}
+                  </span>
+                  <span class="user">
+                    {{rating.username}}
+                    <img :src="rating.avatar
+                    " alt="rating.username">
+                  </span>
+                </div>
+                <div class="rating-content">
+                  <i class="icon-thumb_down"  v-show="rating.rateType===0"></i>
+                  <i class="icon-thumb_up" v-show="rating.rateType===1"></i>
+                  {{rating.text}}
+                </div>
+              </li>
+            </ul>
+            <div class="no-rating" v-show="!food.ratings || !food.ratings.length">
+              暂无评价
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -58,7 +83,9 @@
     },
     data() {
       return {
-        showFlag: false
+        showFlag: false,
+        rateType: 2,
+        onlyContent: false
       };
     },
     computed: {
@@ -68,9 +95,15 @@
     methods: {
       initShow() {
         this.showFlag = true;
+        this.rateType = 0;
+        this.onlyContent = false;
         // 渲染后再触发滚动事件
         this.$nextTick(() => {
-          this.foodScroll = new BScroll(this.$refs.food, {click: true});
+          if (!this.foodScroll) {
+            this.foodScroll = new BScroll(this.$refs.food, {click: true});
+          } else {
+            this.foodScroll.refresh();
+          }
         });
       },
       backward(ev) {
@@ -84,6 +117,24 @@
         if (!ev._constructed) return;
         Vue.set(this.food, 'count', 1);
         this.$emit('add', ev.target);
+      },
+      needShow(rateType, rating) {
+        console.log(rating);
+        if (this.onlyContent && !rating.text) {
+          return false;
+        };
+        if (rateType === 2) {
+          return true;
+        } else {
+          return rateType === rating.rateType;
+        }
+      },
+      ratingTypeSelect(type) {
+        console.log(type);
+        this.selectType = type;
+      },
+      contentToggle(onlyContent) {
+        this.onlyContent = onlyContent;
       }
     },
     components: {
@@ -102,95 +153,132 @@
     position: fixed
     top: 0
     bottom: 0
+    left: 0
+    right: 0
     transition:all 0.3s linear
     transform:translate3d(0,0,0)
     opacity: 1
+    margin-bottom: 24px
     &.moveAlign-enter,&.moveAlign-leave-to
       transform:translate3d(-100%,0,0)
       opacity: 0
-    .food-img
-      width: 100%
-    .back
-      color: #fff
-      font-size: 16px
-      position: absolute
-      top: 10px
-      left: 10px
-    .foodBase-info
-      padding: 18px
-      border-1px(rgba(7, 17, 27, 0.1))
-      margin-bottom: 16px
-      background-color: #fff
-      .foodName
-        font-size: 14px
-        line-height: 14px
-        font-weight: 700
-        font-family: '微软雅黑'
-      .row2
-        margin-top: 8px
-        margin-bottom: 18px
-        font-size: 10px
-        color: rgb(147,153,159)
-        line-height: 10px
-        .sale
-          margin-right: 12px
-      .row3
-        .nowPrice
-          color: rgb(240,20,20)
+    .food-container
+      .food-img
+        width: 100%
+      .back
+        color: #fff
+        font-size: 16px
+        position: absolute
+        top: 10px
+        left: 10px
+      .foodBase-info
+        padding: 18px
+        border-1px(rgba(7, 17, 27, 0.1))
+        margin-bottom: 16px
+        background-color: #fff
+        .foodName
+          font-size: 14px
+          line-height: 14px
           font-weight: 700
-          font-size:12px
-          line-height: 12px
-        .oldPrice
-          text-decoration: line-through
-          font-size:10px
-          line-height: 10px
-        .cart-btn
-          position:absolute
-          bottom: 18px
-          right:18px
-          width: 74px
-          height: 24px
-          padding: 6px 0
-          border-radius: 12px
-          text-align: center
-          color: #fff
+          font-family: '微软雅黑'
+        .row2
+          margin-top: 8px
+          margin-bottom: 18px
           font-size: 10px
-          background-color: rgb(0,160,220)
-          box-sizing: border-box
-          transition: all 0.5s linear
-          opacity: 1
-          &.buyFade-enter,&.buyFade-leave-to
-            opacity: 0
-        .cartcontrol-wrapper
-          position:absolute
-          bottom: 18px
-          right:18px
-    .food-desc
-      background-color: #fff
-      border-top: 1px solid rgba(7,17,27,.1)
-      border-1px(rgba(7,17,27,.1))
-      margin-bottom:16px
-      padding:18px
-      .food-title
-        font-size:14px
-        font-family:'微软雅黑'
+          color: rgb(147,153,159)
+          line-height: 10px
+          .sale
+            margin-right: 12px
+        .row3
+          .nowPrice
+            color: rgb(240,20,20)
+            font-weight: 700
+            font-size:12px
+            line-height: 12px
+          .oldPrice
+            text-decoration: line-through
+            font-size:10px
+            line-height: 10px
+          .cart-btn
+            position:absolute
+            bottom: 18px
+            right:18px
+            width: 74px
+            height: 24px
+            padding: 6px 0
+            border-radius: 12px
+            text-align: center
+            color: #fff
+            font-size: 10px
+            background-color: rgb(0,160,220)
+            box-sizing: border-box
+            transition: all 0.5s linear
+            opacity: 1
+            &.buyFade-enter,&.buyFade-leave-to
+              opacity: 0
+          .cartcontrol-wrapper
+            position:absolute
+            bottom: 18px
+            right:18px
+      .food-desc
+        background-color: #fff
+        border-top: 1px solid rgba(7,17,27,.1)
+        border-1px(rgba(7,17,27,.1))
+        margin-bottom:16px
+        padding:18px
+        .food-title
+          font-size:14px
+          font-family:'微软雅黑'
+          margin-bottom: 6px
+          font-weight: bold
+          color: #000
+        .food-desc-content
+          font-size:12px
+          line-height:24px
+          font-weight:200
+          color: rgb(77,85,93) 
+      .food-rating
+        background-color: #fff
         margin-bottom: 6px
-        font-weight: bold
-        color: #000
-      .food-desc-content
-        font-size:12px
-        line-height:24px
-        font-weight:200
-        color: rgb(77,85,93) 
-    .food-rating
-      background-color: #fff
-      margin-bottom: 48px
-      padding: 18px
-      border-top: 1px solid rgba(7,17,27,.1)
-     .food-title
-        font-size:14px
-        font-family:'微软雅黑'
-        margin-bottom: 6px
-        font-weight: bold
-        color: #000
+        padding: 18px 0
+        border-top: 1px solid rgba(7,17,27,.1)
+        .food-title
+          font-size:14px
+          font-family:'微软雅黑'
+          margin-bottom: 18px
+          font-weight: bold
+          color: #000
+          padding-left:18px
+        .ratingList-wrapper   
+          li
+            border-1px(rgba(7,17,27,.1))
+            padding:16px 0
+            margin:0 16px
+            .row1
+              margin-bottom: 6px
+              .time
+                font-size: 10px
+                color: rgb(147,153,159)
+                line-height: 12px
+              .user
+                font-size: 10px
+                color: rgb(147,153,159)
+                line-height: 12px
+                float: right
+                img
+                  width: 12px
+                  height: 12px
+                  border-radius: 50%
+            .rating-content
+              font-size:12px
+              font-weight: 500
+              color: rgb(7,17,27)
+              line-height:16px
+              i
+                font-size: 12px
+                line-height: 24px
+                color: rgb(147,153,159)
+                margin-right: 4px
+                &.icon-thumb_up
+                  color: rgb(0,160,220)
 </style>
