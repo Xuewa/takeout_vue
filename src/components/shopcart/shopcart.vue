@@ -1,7 +1,7 @@
 <template>
 	<div class="shopcart">
 		<div class="content">
-			<div class="content-left" @click=toggleCartList()>
+			<div class="content-left" @click="toggleCartList()">
 				<div class="logo-wrapper" >
 					<span class="logo" :class="{'current':totalCount>0}">
 					  <i class="icon-shopping_cart "></i>
@@ -13,7 +13,7 @@
 				</span>
 				<span class="desc">另需配送费￥{{deliveryPrice}}元</span>
 			</div>
-			<div class="content-right" @click=pay>
+			<div class="content-right" @click="pay">
 				<span class="pay" :class="{'highlight':totalPrice>=minPrice}">
 				{{payDesc}}</span>
 			</div>
@@ -35,7 +35,7 @@
 				</div>
 				<div class="shopcartList-content" ref="cartListWrapper">
 					<ul>
-						<li class="food" v-for="food in selectFoods">
+						<li class="food-item" v-for="food in selectFoods">
 							<span class="shopcartList-left">{{food.name}}</span>
 							<span class="shopcartList-right">
 								<span class="price">￥{{food.price*food.count}}</span>
@@ -66,7 +66,7 @@ export default {
       default() {
         return [{
           price: 10,
-          count: 1
+          count: 0
         }];
       }
     },
@@ -348,7 +348,7 @@ export default {
 					color: rgb(0, 160, 220)
 					margin-right: 18px
 			.shopcartList-content
-				li
+				.food-item
 					height:24px
 					padding: 12px 18px
 					border-bottom: 1px solid rgba(7,17,27,.1)

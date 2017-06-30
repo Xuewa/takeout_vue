@@ -41,10 +41,10 @@
           :onlyContent="onlyContent" :ratingArr="food.ratings"></ratingSelect>
           <div class="ratingList-wrapper">
             <ul v-show="food.ratings && food.ratings.length">
-              <li  v-for="rating in food.ratings" v-show="needShow(rateType,rating)">
+              <li  v-for="rating in food.ratings" v-show="needShow(rating)">
                 <div class="row1">
                   <span class="time">
-                    {{rating.rateTime}}
+                    {{rating.rateTime | formatDate}}
                   </span>
                   <span class="user">
                     {{rating.username}}
@@ -71,6 +71,7 @@
 
 <script type="text/ecmascript-6">
   import Vue from 'vue';
+  import {formatDate} from 'common/js/utils';
   import cartcontrol from 'components/cartcontrol/cartcontrol.vue';
   import ratingSelect from 'components/ratingSelect/ratingSelect.vue';
   import BScroll from 'better-scroll';
@@ -95,7 +96,7 @@
     methods: {
       initShow() {
         this.showFlag = true;
-        this.rateType = 0;
+        this.rateType = 2;
         this.onlyContent = false;
         // 渲染后再触发滚动事件
         this.$nextTick(() => {
@@ -118,23 +119,43 @@
         Vue.set(this.food, 'count', 1);
         this.$emit('add', ev.target);
       },
-      needShow(rateType, rating) {
-        console.log(rating);
+      needShow(rating) {
         if (this.onlyContent && !rating.text) {
           return false;
         };
-        if (rateType === 2) {
+        if (this.rateType === 2) {
+          console.log('true');
           return true;
         } else {
-          return rateType === rating.rateType;
+          return this.rateType === rating.rateType;
         }
       },
       ratingTypeSelect(type) {
         console.log(type);
-        this.selectType = type;
+        this.rateType = type;
+        this.$nextTick(() => {
+          if (!this.foodScroll) {
+            this.foodScroll = new BScroll(this.$refs.food, {click: true});
+          } else {
+            this.foodScroll.refresh();
+          }
+        });
       },
       contentToggle(onlyContent) {
         this.onlyContent = onlyContent;
+        this.$nextTick(() => {
+          if (!this.foodScroll) {
+            this.foodScroll = new BScroll(this.$refs.food, {click: true});
+          } else {
+            this.foodScroll.refresh();
+          }
+        });
+      }
+    },
+    filters: {
+      formatDate(time) {
+        let date = new Date(time);
+        return formatDate(date, 'yyyy-MM-dd HH:mm');
       }
     },
     components: {
@@ -166,11 +187,17 @@
       .food-img
         width: 100%
       .back
-        color: #fff
+        color: rgba(70,70,70,.2)
         font-size: 16px
         position: absolute
         top: 10px
         left: 10px
+        background-color:rgba(255,255,255,.5)
+        width:24px
+        height:24px
+        line-height:26px
+        text-align: center
+        border-radius:50%
       .foodBase-info
         padding: 18px
         border-1px(rgba(7, 17, 27, 0.1))
