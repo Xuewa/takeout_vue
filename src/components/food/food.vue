@@ -116,8 +116,8 @@
       },
       addFirst(ev) {
         if (!ev._constructed) return;
-        Vue.set(this.food, 'count', 1);
         this.$emit('add', ev.target);
+        Vue.set(this.food, 'count', 1);
       },
       needShow(rating) {
         if (this.onlyContent && !rating.text) {

@@ -116,6 +116,7 @@ export default {
       for (let i = 0; i < this.selectFoods.length; i++) {
         count += this.selectFoods[i].count;
       }
+      if (count === 0) this.fold = true;
       return count;
     },
     payDesc() {
@@ -186,7 +187,11 @@ export default {
         this.fold = !this.fold;
       }
       this.$nextTick(() => {
-        this.cartListScroll = new BScroll(this.$refs.cartListWrapper, {click: true});
+        if (!this.cartListScroll) {
+          this.cartListScroll = new BScroll(this.$refs.cartListWrapper, {click: true});
+        } else {
+          this.cartListScroll.refrensh();
+        }
       });
     },
     empty() {
@@ -233,7 +238,7 @@ export default {
 					position: relative
 					top: -10px
 					padding: 6px
-					margin:0 12px 0 12px
+					margin:0 6px 0 6px
 					display: inline-block
 					width: 56px
 					height: 56px
@@ -275,7 +280,7 @@ export default {
 					font-weight: 700
 					line-height: 24px
 					margin: 12px 0 12px 0
-					padding-right: 12px
+					padding-right: 6px
 					box-sizing: border-box
 					font-size: 16px
 					vertical-align: top
@@ -287,7 +292,7 @@ export default {
 					display: inline-block
 					vertical-align:top
 					line-height: 24px
-					margin: 12px 0 0 12px
+					margin: 12px 0 0 6px
 					font-size: 10px
 			.content-right
 				flex: 0 0 105px
@@ -356,6 +361,7 @@ export default {
 						display: inline-block
 						color: rgb(7,17,27)
 						line-height: 24px
+						font-size: 14px
 					.shopcartList-right
 						color: rgb(240,20,20)
 						font-weight: 700
