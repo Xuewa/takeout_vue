@@ -50,8 +50,8 @@
   @import "../../common/stylus/mixin.styl";
   .star
     text-align: center
-    width: 100%
-    height: 24px
+    display:inline-block
+    vertical-align: top
     &.star-48
       .star-item
         width: 24px
@@ -67,11 +67,13 @@
           bg-img('star48_half')
     &.star-36
        .star-item
-          width: 18px
-          height: 18px
-          background-size: 18px 18px
+          width: 15px
+          height: 15px
+          background-size: 15px 15px
           display: inline-block
           margin-right: 6px
+          &:last-child
+            margin-right:0
           &.on
             bg-img('star36_on')
           &.off
@@ -80,9 +82,9 @@
             bg-img('star36_half')
     &.star-24
         .star-item
-          width: 12px
-          height: 12px
-          background-size: 12px 12px
+          width: 10px
+          height: 10px
+          background-size: 10px 10px
           display: inline-block
           margin-right: 3px
           &.on
