@@ -2,8 +2,8 @@
   <div class="ratingSelect">
   	<ul class="ratingTabs">
   		<li class="allTab" :class="selectType===2?'active':''" @click="selectTab(2,$event)"><font class="tabName">{{ratingTabs.all}}</font><font class="tabNum">{{ratingArr.length}}</font></li>
-  		<li class="positiveTab" :class="selectType===1?'active':''" @click="selectTab(1,$event)"><font class="tabName">{{ratingTabs.positive}}</font><font class="tabNum">{{positives.length}}</font></li>
-  		<li class="negativeTab" :class="selectType==0?'active':''" @click="selectTab(0,$event)"><font class="tabName">{{ratingTabs.negative}}</font><font class="tabNum">{{negatives.length}}</font></li>
+  		<li class="positiveTab" :class="selectType===0?'active':''" @click="selectTab(0,$event)"><font class="tabName">{{ratingTabs.positive}}</font><font class="tabNum">{{positives.length}}</font></li>
+  		<li class="negativeTab" :class="selectType===1?'active':''" @click="selectTab(1,$event)"><font class="tabName">{{ratingTabs.negative}}</font><font class="tabNum">{{negatives.length}}</font></li>
   	</ul>
   	<div class="check" :class="onlyContent?'active':''" @click="toggleCheck($event)">
   		<i class="icon-check_circle"></i>
@@ -57,13 +57,13 @@
     },
     methods: {
       selectTab(selectType, ev) {
-        if (!ev._constructed) return;
         console.log(selectType);
+        // if (!ev._constructed) return;
         this.$emit('ratingTypeSelect', selectType);
       },
       toggleCheck(ev) {
-        console.log(ev);
-        if (!ev._constructed) return;
+        // console.log(ev);
+        // if (!ev._constructed) return;
         var onlyContent = this.onlyContent;
         // this.onlyContent = !onlyContent;
         this.$emit('contentToggle', !onlyContent);

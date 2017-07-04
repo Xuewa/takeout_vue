@@ -28,7 +28,7 @@
   	  </span>
   	</div>
   	<div class="ratings-bottom">
-  	  <ratingSelect ratingTypeSelect="ratingTypeSelect" @contentToggle="contentToggle" :selectType="rateType"
+  	  <ratingSelect @ratingTypeSelect="ratingTypeSelect" @contentToggle="contentToggle" :selectType="rateType"
           :onlyContent="onlyContent" :ratingArr="ratings"></ratingSelect>
   	  <div class="ratingList-wrapper" ref="ratingsScroll">
 	  	  	<ul class="ratingsUl" v-show="ratings && ratings.length">
@@ -60,13 +60,12 @@
 	        <div class="no-rating" v-show="!ratings || !ratings.length">
 	          暂无评价
 	        </div>
-	  	</div>
+	 </div>
   	</div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  // import Vue from 'vue';
   import BScroll from 'better-scroll';
   import {formatDate} from 'common/js/utils';
   import star from 'components/star/star.vue';
@@ -99,6 +98,17 @@
         } else {
           return this.rateType === rating.rateType;
         }
+      },
+      ratingTypeSelect(type) {
+        console.log(type);
+        this.rateType = type;
+        this.$nextTick(() => {
+          if (!this.ratingsScroll) {
+            this.ratingsScroll = new BScroll(this.$refs.ratingsScroll, {click: true});
+          } else {
+            this.ratingsScroll.refresh();
+          }
+        });
       },
       contentToggle(onlyContent) {
         this.onlyContent = onlyContent;
