@@ -53,8 +53,8 @@
                   </span>
                 </div>
                 <div class="rating-content">
-                  <i class="icon-thumb_down"  v-show="rating.rateType===0"></i>
-                  <i class="icon-thumb_up" v-show="rating.rateType===1"></i>
+                  <i class="icon-thumb_down"  v-show="rating.rateType===1"></i>
+                  <i class="icon-thumb_up" v-show="rating.rateType===0"></i>
                   {{rating.text}}
                 </div>
               </li>

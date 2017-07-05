@@ -3,27 +3,27 @@
   	<div class="ratings-top">
   	  <span class="score-part">
   	  	<span class="score">
-  	  	  <font>3.9</font>
+  	  	  <font>{{seller.score}}</font>
   	  	  <label for="" class="score-title">综合评分</label>
   	  	</span>
   	  	<span class="compare">
-  	  	  高于周边商家69.2%	
+  	  	  高于周边商家{{seller.rankRate}}%	
   	  	</span>
   	  </span><!--
    --><span class="stars-part">
   	    <span class="row">
   	  	  <label for="" class="score-title">服务态度</label><!--
-  	   --><star :score="3.9" :size="36"></star><!--
-  	   --><font class="score">3.9</font>
+  	   --><star :score="seller.serviceScore" :size="36"></star><!--
+  	   --><font class="score">{{seller.serviceScore}}</font>
   	    </span>
   	    <span class="row"> 
   	  	  <label for="" class="score-title">商品评分</label><!--
-  	   --><star :score="4.3" :size="36"></star><!--
-  	   --><font class="score">4.3</font>
+  	   --><star :score="seller.foodScore" :size="36"></star><!--
+  	   --><font class="score">{{seller.foodScore}}</font>
   	  	</span>
   	  	<span class="row"> 
   	  	  <label for="" class="score-title">送达时间</label><!--
-  	   --><font class="min">38分钟</font>
+  	   --><font class="min">{{seller.deliveryTime}}分钟</font>
   	  	</span>
   	  </span>
   	</div>
@@ -73,6 +73,12 @@
 
   const ERR_OK = 0;
   export default {
+    props: {
+      seller: {
+        type: Object,
+        default: {}
+      }
+    },
     data() {
       return {
         ratings: [],
@@ -193,13 +199,13 @@
             line-height:18px
             color: rgb(7,17,27)
             vertical-align: top
-            margin-right:12px
+            margin-right:6px
 	      .score
 	        color: rgb(255,153,0)
 	        font-size: 12px
 	        line-height:18px
 	        vertical-align: top
-	        margin-left:12px
+	        margin-left:6px
 	      .min
 	        font-size:12px
 	        color: rgb(147,153,159)

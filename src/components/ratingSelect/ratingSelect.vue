@@ -14,8 +14,8 @@
 
 <script type="text/ecmascript-6">
   const ALL = 2;
-  const POSITIVE = 1;
-  const NEGATIVE = 0;
+  const POSITIVE = 0;
+  const NEGATIVE = 1;
   export default {
     props: {
       selectType: {
