@@ -1,5 +1,5 @@
 <template>
-  <div class="seller">
+  <div class="seller" ref="seller">
   	<div class="seller-top">
   		<div class="top-row">
   			<span class="left-part">
@@ -37,13 +37,35 @@
   		</div>
   	</div>
   	<div class="seller-middle">
-  		<h2>公共与活动</h2>
+  		<h2 class="seller-title">公共与活动</h2>
+      <div class="bulletin">
+        {{seller.bulletin}}
+      </div>
+      <ul v-if="seller.supports" class="supports">
+        <li class="support-item" v-for="item in seller.supports">
+          <span class="icon" :class="classMap[item.type]"></span>
+          <span class="text">{{item.description}}</span>
+        </li>
+      </ul>
   	</div>
+    <div class="seller-pics">
+      <h2 class="seller-title">商家实景</h2>
+      <div class="pics">
+        <img v-for="pic in seller.pics" :src="pic" />
+      </div>
+    </div>
+    <div class="seller-bottom">
+      <h2 class="seller-title">商家信息</h2>
+      <ul class="infos">
+        <li class="info" v-for="info in seller.infos">{{info}}</li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import star from 'components/star/star.vue';
+  import BScroll from 'better-scroll';
 
   export default {
     props: {
@@ -65,6 +87,18 @@
           return '收藏';
         }
       }
+    },
+    created() {
+      this.classMap = ['decrease', 'discount', 'guarantee', 'invoice', 'special'];
+    },
+    mouted() {
+      this.$nextTick(() => {
+        if (!this.sellerScroll) {
+          this.sellerScroll = new BScroll(this.$refs.seller, {click: true});
+        } else {
+          this.sellerScroll.refrensh();
+        }
+      });
     },
     components: {
       star
@@ -145,5 +179,85 @@
               font-weight:500
     .seller-middle
       border-top: 1px solid rgba(7,17,27,.1)
+      border-1px(rgba(7,17,27,.1))
       padding: 18px
+      background-color: #fff
+      margin-bottom:16px
+      .seller-title
+        font-size:14px
+        color: rgb(7,17,27)
+        line-height:14px
+        font-weight: 500
+        margin-bottom: 8px
+      .bulletin
+        font-size: 12px
+        font-weight: 200
+        color: rgb(240,20,20)
+        line-height: 24px
+        margin:0 12px
+      .supports
+        margin-top: 16px
+        .support-item
+          padding:16px 12px
+          font-size: 12px
+          font-weight:200
+          color: rgb(7,17,27)
+          line-height:16px
+          border-top:1px solid rgba(7,17,27,.1)
+          .icon
+            width: 16px
+            height: 16px
+            display: inline-block
+            margin-right: 4px
+            background-size: 16px 16px
+            background-repeat: no-repeat
+            vertical-align: bottom
+            &.decrease
+              bg-img('decrease_4')
+            &.discount
+              bg-img('discount_4')
+            &.guarantee
+              bg-img('guarantee_4')
+            &.invoice
+              bg-img('invoice_4')
+            &.special
+              bg-img('special_4')
+          .text
+            font-size: 10px
+            line-height: 12px
+            /*margin-left: 4px*/
+          &:last-child
+            padding-bottom:0
+    .seller-pics
+      margin-top:16px
+      border-top: 1px solid rgba(7,17,27,.1)
+      border-1px(rgba(7,17,27,.1))
+      background-color:#fff
+      padding:18px
+      .seller-title
+        margin-bottom:12px
+      .pics
+        img
+          width:120px
+          height:90px
+          margin-right:6px
+          &:last-child
+            margin-right:0
+    .seller-bottom
+      margin-top:16px
+      border-top: 1px solid rgba(7,17,27,.1)
+      border-1px(rgba(7,17,27,.1))
+      background-color:#fff
+      padding:18px
+      .infos
+        margin-top:12px
+        .info
+          padding:16px 12px
+          font-size: 12px
+          font-weight:300
+          color: rgb(7,17,27)
+          line-height:16px
+          border-top:1px solid rgba(7,17,27,.1)
+          &:last-child
+            padding-bottom:0
 </style>
