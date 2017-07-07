@@ -83,7 +83,10 @@
     },
     data() {
       return {
-        collectFlag: false
+        collectFlag: (() => {
+          return store.getStorage(this.seller.id, 'collect');
+        })()
+        // collectFlag: false
       };
     },
     computed: {
@@ -116,7 +119,7 @@
     },
     methods: {
       _initSellerScroll() {
-        // console.log('this.sellerScrol');
+        console.log(this.seller.id);
         if (!this.sellerScroll) {
           this.sellerScroll = new BScroll(this.$refs.seller, {click: true});
           // console.log(this.sellerScroll);

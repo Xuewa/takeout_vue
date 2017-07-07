@@ -28,10 +28,12 @@ export function urlParse() {
     var paramArr = urlParamStr.match(regExp);
   }
   var paramObj = {};
-  paramArr.forEach((item) => {
-    let splitArr = item.substr(1).split('=');
-    paramObj[splitArr[0]] = splitArr[1];
-  });
+  if (typeof (paramArr) !== 'undefined') {
+    paramArr.forEach((item) => {
+      let splitArr = item.substr(1).split('=');
+      paramObj[splitArr[0]] = splitArr[1];
+    });
+  }
   // console.log(paramObj);
   return paramObj;
 }
