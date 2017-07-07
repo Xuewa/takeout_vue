@@ -19,12 +19,21 @@
 
 <script type="text/ecmascript-6" >
 import header from 'components/header/header.vue';
+import {urlParse} from 'common/js/utils';
 
 const ERR_OK = 0;
 export default {
   data() {
     return {
-      seller: {}
+      seller: {
+        id: (() => {
+          let globalParam = urlParse();
+          if (globalParam.id) {
+            return globalParam.id;
+          }
+          return NaN;
+        })()
+      }
     };
   },
   created() {

@@ -9,7 +9,6 @@ export function formatDate(date, fmt) {
     'm+': date.getMinutes(),
     's+': date.getSeconds()
   };
-  // console.log(fmt);
   for (let k in o) {
     if (new RegExp(`(${k})`).test(fmt)) {
       let str = o[k] + '';
@@ -20,8 +19,21 @@ export function formatDate(date, fmt) {
   }
   return fmt;
 }
+
 // url参数解析
 export function urlParse() {
+  let urlParamStr = window.location.search;
+  let regExp = /[?&][^?&]+=[^?&]+/g;
+  if (regExp.test(urlParamStr)) {
+    var paramArr = urlParamStr.match(regExp);
+  }
+  var paramObj = {};
+  paramArr.forEach((item) => {
+    let splitArr = item.substr(1).split('=');
+    paramObj[splitArr[0]] = splitArr[1];
+  });
+  // console.log(paramObj);
+  return paramObj;
 }
 
 function padeLeftZero(str) {

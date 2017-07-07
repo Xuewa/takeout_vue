@@ -72,6 +72,7 @@
 <script type="text/ecmascript-6">
   import star from 'components/star/star.vue';
   import BScroll from 'better-scroll';
+  import * as store from 'common/js/store';
 
   export default {
     props: {
@@ -99,6 +100,7 @@
     },
     watch: {
       'seller'() {
+        // console.log('watch--');
         this.$nextTick(() => {
           this._initSellerScroll();
           this._initPicsScroll();
@@ -106,6 +108,7 @@
       }
     },
     mounted() {
+      // console.log('mounted--');
       this.$nextTick(() => {
         this._initSellerScroll();
         this._initPicsScroll();
@@ -113,10 +116,13 @@
     },
     methods: {
       _initSellerScroll() {
+        // console.log('this.sellerScrol');
         if (!this.sellerScroll) {
           this.sellerScroll = new BScroll(this.$refs.seller, {click: true});
+          // console.log(this.sellerScroll);
         } else {
-          this.sellerScroll.refrensh();
+          // console.log(this.sellerScroll);
+          this.sellerScroll.refresh();
         }
       },
       _initPicsScroll() {
@@ -132,7 +138,7 @@
           if (!this.picsScroll) {
             this.picsScroll = new BScroll(this.$refs.picsWrapper, {scrollX: true, eventPassthrough: 'vertical'});
           } else {
-            this.picsScroll.refrensh();
+            this.picsScroll.refresh();
           }
         });
       },
@@ -141,6 +147,7 @@
           return;
         }
         this.collectFlag = !this.collectFlag;
+        store.setStorage(this.seller.id, 'collect', this.collectFlag);
       }
     },
     components: {
