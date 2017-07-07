@@ -37,7 +37,14 @@
   		</div>
   	</div>
   	<div class="seller-middle">
-  		<h2>公共与活动</h2>
+  		<h2 class="seller-title">公共与活动</h2>
+  		<div class="bulletin">{{seller.bulletin}}</div>
+  		<ul v-if="seller.supports" class="supports">
+          <li class="support-item" v-for="item in seller.supports">
+            <span class="icon" :class="classMap[item.type]"></span>
+            <span class="text">{{item.description}}</span>
+          </li>
+        </ul>
   	</div>
   </div>
 </template>
@@ -146,4 +153,7 @@
     .seller-middle
       border-top: 1px solid rgba(7,17,27,.1)
       padding: 18px
+      background-color:#fff
+	  .seller-title
+	    
 </style>
