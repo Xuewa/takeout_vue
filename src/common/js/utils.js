@@ -20,6 +20,9 @@ export function formatDate(date, fmt) {
   }
   return fmt;
 }
+// url参数解析
+export function urlParse() {
+}
 
 function padeLeftZero(str) {
   // 永远取2位字符

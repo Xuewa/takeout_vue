@@ -237,6 +237,8 @@ export default {
             font-weight: 700
             margin: 64px 0 16px 0
             text-align: center
+          .star-wrapper
+            text-align:center
           .title
             width: 80%
             display: flex

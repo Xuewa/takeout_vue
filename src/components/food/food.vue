@@ -89,10 +89,6 @@
         onlyContent: false
       };
     },
-    computed: {
-    },
-    created() {
-    },
     methods: {
       initShow() {
         this.showFlag = true;
